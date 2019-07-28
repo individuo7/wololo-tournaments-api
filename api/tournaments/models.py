@@ -47,7 +47,9 @@ class Game(TimeStampedModel):
         return None
 
     def __str__(self):
-        return "{} game of '{}' tournament".format(self.phase, self.tournament)
+        return "{} - {} game of '{}' tournament".format(
+            self.id, self.phase, self.tournament
+        )
 
 
 class Match(models.Model):
@@ -62,7 +64,7 @@ class Match(models.Model):
 
     def __str__(self):
         players = " vs ".join([x.player.name for x in self.game.players.all()])
-        return "{}: {}".format(self.game.tournament.name, players)
+        return "{} - {}".format(self.id, players)
 
 
 class CivilizationMatch(models.Model):

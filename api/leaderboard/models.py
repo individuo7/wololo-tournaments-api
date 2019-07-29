@@ -30,5 +30,22 @@ class Transaction(TimeStampedModel):
 class Prediction(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.deletion.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE)
-    winner = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
-    votes = GenericRelation(Transaction)
+    transactions = GenericRelation(Transaction)
+
+    @property
+    def winner(self):
+        winner = None
+        prev_score = 0
+        for score in self.scores.all():
+            if score.score > prev_score:
+                winner = score.player
+                prev_score = score.score
+        return winner
+
+
+class Score(models.Model):
+    prediction = models.ForeignKey(
+        Prediction, on_delete=models.deletion.CASCADE, related_name="scores"
+    )
+    player = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
+    score = models.PositiveSmallIntegerField()

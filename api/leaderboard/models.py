@@ -1,10 +1,15 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django_extensions.db.fields import AutoSlugField
 
 from model_utils.models import TimeStampedModel
+
 from api.tournaments.models import Game, Player
+from api.users.documents import UserDocument
 from api.users.models import User
 
 
@@ -16,7 +21,9 @@ class Group(TimeStampedModel):
 
 
 class Transaction(TimeStampedModel):
-    user = models.ForeignKey(User, on_delete=models.deletion.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.deletion.CASCADE, related_name="transactions"
+    )
     amount = models.PositiveSmallIntegerField()
     description = models.CharField(max_length=255)
 
@@ -49,3 +56,16 @@ class Score(models.Model):
     )
     player = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
     score = models.PositiveSmallIntegerField()
+
+
+@receiver(post_save, sender=Transaction)
+def update_leaderboard(sender, instance, **kwargs):
+    user = (
+        User.objects.filter(id=instance.user.id)
+        .annotate(total_gold=Sum("transactions__amount"))
+        .first()
+    )
+    user = UserDocument(
+        meta={"id": instance.user.id}, title=user.username, gold=user.total_gold
+    )
+    user.save()

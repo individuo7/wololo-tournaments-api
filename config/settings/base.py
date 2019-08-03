@@ -71,6 +71,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "api.contrib.elasticsearch",
     "api.users.apps.UsersConfig",
     "api.tournaments",
     "api.leaderboard",
@@ -262,7 +263,3 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ADAPTER = "api.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "api.users.adapters.SocialAccountAdapter"
-
-
-# Your stuff...
-# ------------------------------------------------------------------------------

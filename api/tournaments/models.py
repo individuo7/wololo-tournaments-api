@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.forms import ValidationError
 from django_extensions.db.fields import AutoSlugField
@@ -11,6 +12,7 @@ class Tournament(TimeStampedModel):
     web = models.URLField()
     banner = models.ImageField(upload_to="tournaments/banners", blank=True, null=True)
     icon = models.ImageField(upload_to="tournaments/icons", blank=True, null=True)
+    transactions = GenericRelation("leaderboard.Transaction")
 
     def __str__(self):
         return self.name

@@ -38,7 +38,9 @@ class Team(TimeStampedModel):
 
 
 class Game(TimeStampedModel):
-    tournament = models.ForeignKey(Tournament, on_delete=models.deletion.CASCADE)
+    tournament = models.ForeignKey(
+        Tournament, on_delete=models.deletion.CASCADE, related_name="games"
+    )
     phase = models.CharField(max_length=30)
     date = models.DateTimeField()
     number_of_matches = models.PositiveSmallIntegerField()
@@ -93,7 +95,7 @@ class PlayerGame(models.Model):
         Game, on_delete=models.deletion.CASCADE, related_name="players"
     )
     player = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
-    team = models.ForeignKey(Team, blank=True, null=True, on_delete=models.SET_NULL)
+    team = models.ForeignKey(Team, on_delete=models.deletion.CASCADE)
 
     def __str__(self):
         return "{} in {} game".format(self.player.name, self.game.phase)

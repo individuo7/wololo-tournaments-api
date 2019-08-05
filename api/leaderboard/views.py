@@ -1,13 +1,13 @@
-from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from api.contrib.elasticsearch import Client
 from .models import Group, Prediction
 from .serializers import GroupSerializer, PredictionSerializer
 
 
-client = Elasticsearch()
+client = Client()
 
 
 class GroupViewSet(ModelViewSet):

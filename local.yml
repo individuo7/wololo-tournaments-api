@@ -11,6 +11,7 @@ services:
       dockerfile: ./compose/local/django/Dockerfile
     image: api_local_django
     depends_on:
+      - elasticsearch
       - postgres
       - mailhog
     volumes:
@@ -32,6 +33,16 @@ services:
       - local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
 
   mailhog:
     image: mailhog/mailhog:v1.0.0

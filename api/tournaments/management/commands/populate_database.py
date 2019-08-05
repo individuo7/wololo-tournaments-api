@@ -1,14 +1,15 @@
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from elasticsearch import Elasticsearch
 from factory import DjangoModelFactory, Faker
 
+from api.contrib.elasticsearch import Client
 from api.leaderboard.models import Prediction, Score, Transaction
 from api.tournaments.models import Tournament, Player, Team, Game, PlayerGame
 from api.users.models import User
 
-es = Elasticsearch()
+
+es = Client()
 
 
 class UserFactory(DjangoModelFactory):

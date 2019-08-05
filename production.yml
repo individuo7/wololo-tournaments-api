@@ -12,6 +12,7 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     image: api_production_django
     depends_on:
+      - elasticsearch
       - postgres
       - redis
     env_file:
@@ -42,6 +43,16 @@ services:
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
 
   redis:
     image: redis:5.0

@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "django_extensions",
     "rest_framework",
     "rest_framework_swagger",
 ]

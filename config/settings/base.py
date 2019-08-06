@@ -223,7 +223,7 @@ ES_HOST = "elasticsearch" if env("USE_DOCKER") == "yes" else "localhost"
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Mauricio Reyes""", "m@wololo-tournaments.com")]
+ADMINS = [("""Mauricio Reyes""", "m@wololo.appjango.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 

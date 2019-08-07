@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "django_extensions",
     "rest_framework",
     "rest_framework_swagger",
 ]
@@ -216,7 +217,7 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-ES_HOST = "elasticsearch" if env("USE_DOCKER") == "yes" else "localhost"
+ES_HOST = "elasticsearch"
 
 # ADMIN
 # ------------------------------------------------------------------------------

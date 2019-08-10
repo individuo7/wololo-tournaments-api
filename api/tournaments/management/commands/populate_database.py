@@ -1,15 +1,29 @@
+import requests
+
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from factory import DjangoModelFactory, Faker
+from io import BytesIO
+from PIL import Image
 
 from api.contrib.elasticsearch import Client
 from api.leaderboard.models import Prediction, Score, Transaction
 from api.tournaments.models import Tournament, Player, Team, Game, PlayerGame
 from api.users.models import User
-
+from django.core.files.base import ContentFile
 
 es = Client()
+
+
+def add_image(name, field, res):
+    response = requests.get("https://picsum.photos/{}".format(res))
+    output_file = BytesIO()
+    img = Image.open(BytesIO(response.content))
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+    img.save(output_file, "JPEG")
+    field.save("{}.jpg".format(name), ContentFile(output_file.getvalue()), save=False)
 
 
 class UserFactory(DjangoModelFactory):
@@ -38,34 +52,22 @@ class Command(BaseCommand):
         Transaction.objects.all().delete()
         User.objects.filter(is_staff=False, is_superuser=False).delete()
 
-        Tournament.objects.create(
-            name="King of the desert 3",
-            prize="$15,800",
-            web="https://google.com/search?q=King+of+the+desert+3",
-            banner="https://picsum.photos/1400/400",
-            icon="https://picsum.photos/500",
-        )
-        Tournament.objects.create(
-            name="Escape Champions League",
-            prize="$60,000",
-            web="https://google.com/search?q=Escape+Champions+League",
-            banner="https://picsum.photos/1400/400",
-            icon="https://picsum.photos/500",
-        )
-        Tournament.objects.create(
-            name="AoE2 Hidden Cup 2",
-            prize="$10,300",
-            web="https://google.com/search?q=AoE2+Hidden+Cup+2",
-            banner="https://picsum.photos/1400/400",
-            icon="https://picsum.photos/500",
-        )
-        Tournament.objects.create(
-            name="ECL Season 1: Southeast Asia",
-            prize="$7,000",
-            web="https://google.com/search?q=ECL+Season+1+Southeast+Asia",
-            banner="https://picsum.photos/1400/400",
-            icon="https://picsum.photos/500",
-        )
+        for name, prize in [
+            ("King of the desert 3", "$15,800"),
+            ("Escape Champions League", "$60,000"),
+            ("AoE2 Hidden Cup 2", "$10,300"),
+            ("ECL Season 1: Southeast Asia", "$7,000"),
+        ]:
+            tournament = Tournament.objects.create(
+                name=name, prize=prize, web="https://dummy.com"
+            )
+
+            tournament.web = "https://{}.com".format(tournament.slug)
+            add_image(
+                "{}-banner".format(tournament.slug), tournament.banner, "1400/400"
+            )
+            add_image("{}-icon".format(tournament.icon), tournament.icon, "500")
+            tournament.save()
 
         Player.objects.create(name="TheViper", country="NO")
         Player.objects.create(name="DauT", country="RS")

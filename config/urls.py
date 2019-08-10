@@ -4,14 +4,22 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+from rest_framework.schemas import get_schema_view
+from rest_framework_swagger import renderers
 from rest_framework_swagger.views import get_swagger_view
 
 from . import api
 
 schema_view = get_swagger_view(title="Pastebin API")
+openapi_view = get_schema_view(
+    title="OpenAPI definition", renderer_classes=[renderers.OpenAPIRenderer]
+)
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("api/", include(api)),
+    path("docs/", schema_view),
+    path("docs/swagger.json", openapi_view),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
@@ -27,8 +35,6 @@ if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
-        path("api/", include(api)),
-        path("docs/", schema_view),
         path(
             "400/",
             default_views.bad_request,

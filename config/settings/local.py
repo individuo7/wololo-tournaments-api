@@ -25,6 +25,8 @@ CACHES = {
     }
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 # EMAIL
 # ------------------------------------------------------------------------------
 host = "mailhog" if env("USE_DOCKER") == "yes" else "localhost"

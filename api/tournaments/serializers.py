@@ -48,7 +48,7 @@ class GameSerializer(ModelSerializer):
     class Meta:
         model = Game
         fields = [
-            "id",
+            "slug",
             "tournament",
             "date",
             "winner",

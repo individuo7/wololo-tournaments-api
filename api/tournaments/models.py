@@ -44,6 +44,9 @@ class Game(TimeStampedModel):
     phase = models.CharField(max_length=30)
     date = models.DateTimeField()
     number_of_matches = models.PositiveSmallIntegerField()
+    slug = AutoSlugField(
+        "slug", max_length=255, unique=True, populate_from=(["tournament", "phase"])
+    )
 
     @property
     def winner(self):
@@ -51,9 +54,8 @@ class Game(TimeStampedModel):
         return None
 
     def __str__(self):
-        return "{} - {} game of '{}' tournament".format(
-            self.id, self.phase, self.tournament
-        )
+        players = " vs ".join([x.player.name for x in self.players.all()])
+        return "*{}* {} tournament".format(self.tournament, players)
 
 
 class Match(models.Model):

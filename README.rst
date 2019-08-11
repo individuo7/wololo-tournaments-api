@@ -23,7 +23,7 @@ Quick start
 
 
 Useful addresses
-^^^^^^^^^^^^^^^^
+----------------
 
 ====================  ========================================
 Django admin          http://localhost:8000/admin/

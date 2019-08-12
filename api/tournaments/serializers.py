@@ -8,6 +8,12 @@ class TournamentSerializer(ModelSerializer):
         fields = ["slug", "name", "prize", "web", "banner", "icon"]
 
 
+class TournamentSerializerSmall(ModelSerializer):
+    class Meta:
+        model = Tournament
+        fields = ["slug", "name"]
+
+
 class PlayerSerializer(ModelSerializer):
     class Meta:
         model = Player
@@ -43,7 +49,7 @@ class MatchGameSerializer(ModelSerializer):
 class GameSerializer(ModelSerializer):
     players = PlayerGameSerializer(many=True)
     matches = MatchGameSerializer(many=True)
-    tournament = CharField(source="tournament.slug")
+    tournament = TournamentSerializerSmall()
 
     class Meta:
         model = Game

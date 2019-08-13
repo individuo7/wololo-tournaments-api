@@ -10,12 +10,14 @@ class TournamentViewSet(ReadOnlyModelViewSet):
     lookup_field = "slug"
 
 
-class GameViewSixin(GenericViewSet):
+class GameViewMixin(GenericViewSet):
     serializer_class = GameSerializer
     lookup_field = "slug"
 
     def get_queryset(self):
-        tournament = self.kwargs["tournament"]
+        tournament = self.kwargs.get("tournament", None)
+        if tournament is None:
+            return Game.objects.all()
         if tournament == "upcoming":
             return Game.objects.order_by("-date")[:5]
 
@@ -25,9 +27,9 @@ class GameViewSixin(GenericViewSet):
         abstract = True
 
 
-class GameListViewSet(mixins.ListModelMixin, GameViewSixin):
+class GameListViewSet(mixins.ListModelMixin, GameViewMixin):
     pass
 
 
-class GameDetailsViewSet(mixins.RetrieveModelMixin, GameViewSixin):
+class GameDetailsViewSet(mixins.RetrieveModelMixin, GameViewMixin):
     pass

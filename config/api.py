@@ -4,8 +4,8 @@ from api.tournaments.views import GameListViewSet, GameDetailsViewSet, Tournamen
 from api.leaderboard.views import GroupViewSet, LeaderboardViewSet, PredictionViewSet
 
 router = routers.DefaultRouter()
-router.register(r"games/(?P<tournament>[^/.]+)", GameListViewSet, basename="games")
 router.register(r"games", GameDetailsViewSet, basename="games")
+router.register(r"games/t/(?P<tournament>[^/.]+)", GameListViewSet, basename="games")
 router.register(r"groups", GroupViewSet)
 router.register(r"leaderboards", LeaderboardViewSet, basename="leaderboards-all")
 router.register(

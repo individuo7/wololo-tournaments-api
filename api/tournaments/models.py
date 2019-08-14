@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import ValidationError
 from django_extensions.db.fields import AutoSlugField
 from model_utils.models import TimeStampedModel
+from .choices import CIVILIZATION_CHOICES, COUNTRY_CHOICES
 
 
 class Tournament(TimeStampedModel):
@@ -22,7 +23,7 @@ class Player(TimeStampedModel):
     name = models.CharField(max_length=255)
     slug = AutoSlugField("slug", max_length=255, unique=True, populate_from=("name",))
     # TODO: add country choices
-    country = models.CharField(max_length=60)
+    country = models.CharField(max_length=60, choices=COUNTRY_CHOICES)
 
     def __str__(self):
         return self.name
@@ -80,7 +81,9 @@ class CivilizationMatch(models.Model):
     game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
     # TODO: add civilization choices
-    civilization = models.CharField(max_length=30, blank=True, null=True)
+    civilization = models.CharField(
+        max_length=30, blank=True, null=True, choices=CIVILIZATION_CHOICES
+    )
 
     def clean(self):
         if self.match.game != self.game:
@@ -90,6 +93,9 @@ class CivilizationMatch(models.Model):
 
     class Meta:
         unique_together = ["match", "game", "player"]
+
+    def __str__(self):
+        return "{} using {}".format(self.player, self.civilization)
 
 
 class PlayerGame(models.Model):

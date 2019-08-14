@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.serializers import ModelSerializer, CharField, SerializerMethodField
 from .models import CivilizationMatch, Game, Match, Player, PlayerGame, Tournament
 
 
@@ -50,15 +50,20 @@ class GameSerializer(ModelSerializer):
     players = PlayerGameSerializer(many=True)
     matches = MatchGameSerializer(many=True)
     tournament = TournamentSerializerSmall()
+    score = SerializerMethodField()
+
+    def get_score(self, obj):
+        return "0:0"
 
     class Meta:
         model = Game
         fields = [
+            "date",
+            "matches",
+            "number_of_matches",
+            "players",
+            "score",
             "slug",
             "tournament",
-            "date",
             "winner",
-            "players",
-            "number_of_matches",
-            "matches",
         ]

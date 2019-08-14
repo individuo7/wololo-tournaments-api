@@ -17,11 +17,6 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ("name", "country")
 
 
-@admin.register(CivilizationMatch)
-class CivilizationMatchAdmin(admin.ModelAdmin):
-    list_display = ("match", "game", "player", "civilization")
-
-
 class PlayerGameInline(admin.TabularInline):
     extra = 2
     model = PlayerGame
@@ -43,7 +38,12 @@ class MatchGameInline(admin.TabularInline):
         return "civs: {}".format(player_civ)
 
 
+class CivilizationMatchInline(admin.TabularInline):
+    extra = 1
+    model = CivilizationMatch
+
+
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
     list_display = ("tournament", "phase", "date", "winner")
-    inlines = [PlayerGameInline, MatchGameInline]
+    inlines = [PlayerGameInline, MatchGameInline, CivilizationMatchInline]

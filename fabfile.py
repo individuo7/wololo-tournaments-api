@@ -14,3 +14,4 @@ def deploy():
         time.sleep(15)
         run("docker-compose -f production.yml build")
         run("docker-compose -f production.yml up -d")
+        run("docker-compose -f production.yml run --rm django python manage.py migrate")

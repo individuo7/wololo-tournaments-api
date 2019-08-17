@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.forms.models import ModelForm
 from .models import CivilizationMatch, Game, Player, PlayerGame, Team, Tournament, Match
 
 
@@ -22,8 +23,16 @@ class PlayerGameInline(admin.TabularInline):
     model = PlayerGame
 
 
+class AlwaysChangedModelForm(ModelForm):
+    def has_changed(self):
+        """ Should returns True if data differs from initial.
+        By always returning true even unchanged inlines will get validated and saved."""
+        return True
+
+
 class MatchGameInline(admin.TabularInline):
-    extra = 1
+    extra = 0
+    form = AlwaysChangedModelForm
     model = Match
 
     readonly_fields = ("civilizations",)
@@ -39,11 +48,12 @@ class MatchGameInline(admin.TabularInline):
 
 
 class CivilizationMatchInline(admin.TabularInline):
-    extra = 1
+    extra = 2
     model = CivilizationMatch
 
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
-    list_display = ("tournament", "phase", "date", "winner")
+    search_fields = ["tournament__name", "slug"]
+    list_display = ("tournament", "phase", "player_list", "date", "slug", "winner")
     inlines = [PlayerGameInline, MatchGameInline, CivilizationMatchInline]

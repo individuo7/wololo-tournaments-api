@@ -54,16 +54,21 @@ class Game(TimeStampedModel):
         # TODO: calculate using self.number_of_matches and self.matches.all()
         return None
 
+    @property
+    def player_list(self):
+        return " vs ".join([x.player.name for x in self.players.all()])
+
     def __str__(self):
-        players = " vs ".join([x.player.name for x in self.players.all()])
-        return "*{}* {} tournament".format(self.tournament, players)
+        return "*{}* {} tournament".format(self.tournament, self.player_list)
 
 
 class Match(models.Model):
     game = models.ForeignKey(
         Game, on_delete=models.deletion.CASCADE, related_name="matches"
     )
-    winner = models.ForeignKey(Team, on_delete=models.deletion.CASCADE)
+    winner = models.ForeignKey(
+        Team, on_delete=models.deletion.CASCADE, blank=True, null=True
+    )
 
     def clean(self):
         if self.winner not in [x.team for x in self.game.players.all()]:

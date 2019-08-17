@@ -39,11 +39,14 @@ class CivilizationMatchSerializer(ModelSerializer):
 
 class MatchGameSerializer(ModelSerializer):
     civilizations = CivilizationMatchSerializer(many=True)
-    winner = CharField(source="winner.slug")
+    winner = SerializerMethodField()
 
     class Meta:
         model = Match
         fields = ["id", "winner", "civilizations"]
+
+    def get_winner(self, obj):
+        return obj.winner.slug if obj.winner else None
 
 
 class GameSerializer(ModelSerializer):

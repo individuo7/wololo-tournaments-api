@@ -4,6 +4,14 @@ from django.db import migrations
 import django_extensions.db.fields
 
 
+def add_slug(apps, schema_editor):
+    """Set site domain and name."""
+    Game = apps.get_model("tournaments", "Game")
+    for i, game in enumerate(Game.objects.all()):
+        game.slug = "slug-{}".format(i)
+        game.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [("tournaments", "0002_auto_20190804_1830")]
@@ -17,8 +25,8 @@ class Migration(migrations.Migration):
                 editable=False,
                 max_length=255,
                 populate_from=["tournament", "phase"],
-                unique=True,
                 verbose_name="slug",
             ),
-        )
+        ),
+        migrations.RunPython(add_slug, reverse_code=migrations.RunPython.noop),
     ]

@@ -87,7 +87,6 @@ class CivilizationMatch(models.Model):
     )
     game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.deletion.CASCADE)
-    # TODO: add civilization choices
     civilization = models.CharField(
         max_length=30, blank=True, null=True, choices=CIVILIZATION_CHOICES
     )

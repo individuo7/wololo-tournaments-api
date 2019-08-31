@@ -71,7 +71,9 @@ class Match(models.Model):
     )
 
     def clean(self):
-        if self.winner not in [x.team for x in self.game.players.all()]:
+        if self.winner is not None and self.winner not in [
+            x.team for x in self.game.players.all()
+        ]:
             raise ValidationError("invalid team.")
 
     def __str__(self):

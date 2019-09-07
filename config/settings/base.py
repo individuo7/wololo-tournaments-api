@@ -76,7 +76,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "api.contrib.elasticsearch",
-    "api.users.apps.UsersConfig",
+    "api.users",
     "api.tournaments",
     "api.leaderboard",
     # Your stuff: custom apps go here
@@ -157,7 +157,10 @@ STATICFILES_FINDERS = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "api.contrib.rest_framework.schema.CustomSchema"
+    "DEFAULT_SCHEMA_CLASS": "api.contrib.rest_framework.schema.CustomSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ],
 }
 
 # MEDIA

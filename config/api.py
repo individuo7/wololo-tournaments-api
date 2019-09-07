@@ -1,7 +1,8 @@
 # from django.conf.urls import include, url
 from rest_framework import routers
-from api.tournaments.views import GameListViewSet, GameDetailsViewSet, TournamentViewSet
 from api.leaderboard.views import GroupViewSet, LeaderboardViewSet, PredictionViewSet
+from api.tournaments.views import GameListViewSet, GameDetailsViewSet, TournamentViewSet
+from api.users.views import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r"games", GameDetailsViewSet, basename="games")
@@ -13,6 +14,7 @@ router.register(
 )
 router.register(r"predictions", PredictionViewSet)
 router.register(r"tournaments", TournamentViewSet)
+router.register(r"users", UserViewSet, basename="users")
 
 
 urlpatterns = router.urls

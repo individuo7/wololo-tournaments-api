@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "rest_framework_swagger",
     "rest_auth",
+    "rest_auth.registration",
 ]
 
 LOCAL_APPS = [
@@ -159,7 +160,8 @@ STATICFILES_FINDERS = [
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "api.contrib.rest_framework.schema.CustomSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication"
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
 }
 

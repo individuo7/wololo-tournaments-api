@@ -17,3 +17,4 @@ class UserSerializer(ModelSerializer):
             "is_active",
             "last_login",
         ]
+        read_only_fields = ["username", "date_joined", "is_active", "last_login"]

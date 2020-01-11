@@ -7,7 +7,7 @@ client = Client()
 
 
 class User(AbstractUser):
-    icon = models.ImageField(upload_to="icons", null=True)
+    icon = models.CharField(null=True, blank=True, max_length=30)
     background = models.ImageField(upload_to="backgrounds", null=True)
     background_color = models.CharField(blank=True, max_length=30)
     default_group = models.ForeignKey(

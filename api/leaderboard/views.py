@@ -27,13 +27,19 @@ class LeaderboardViewSet(GenericViewSet):
             qs = (
                 Search(using=client, index="player")
                 .query("match", tournament=tournament)
+                .sort("-gold")
+                .params(size=100)
                 .execute()
             )
 
             return Response([{"username": x.username, "gold": x.gold} for x in qs])
-
         # sum the gold of all the tournaments participations
-        qs = Search(using=client, index="player").execute()
+        qs = (
+            Search(using=client, index="player")
+            .params(size=1000)  # temporal solution, all records are required
+            .execute()
+        )
+
         users = list(set([x.username for x in qs]))
         table = {users[i]: 0 for i in range(0, len(users))}
 

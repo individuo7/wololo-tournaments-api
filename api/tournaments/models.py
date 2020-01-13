@@ -22,7 +22,6 @@ class Tournament(TimeStampedModel):
 class Player(TimeStampedModel):
     name = models.CharField(max_length=255)
     slug = AutoSlugField("slug", max_length=255, unique=True, populate_from=("name",))
-    # TODO: add country choices
     country = models.CharField(max_length=60, choices=COUNTRY_CHOICES)
 
     def __str__(self):

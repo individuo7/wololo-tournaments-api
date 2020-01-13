@@ -5,7 +5,7 @@ from elasticsearch_dsl.connections import connections
 
 
 class ElasticsearchDSLConfig(AppConfig):
-    name = "contrib.elasticsearch"
+    name = "elasticsearch"
     verbose_name = _("Elasticsearch")
 
     def ready(self):
